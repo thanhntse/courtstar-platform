@@ -6,10 +6,16 @@ This project is a platform for booking badminton courts. The frontend is built u
 
 ## Features
 
-- User registration and authentication
-- Search and book available badminton courts
+
+- User registration and authentication (platform account or with Google)
+- Register as a manager or customer
+- Managers can add new courts
+- Customers and guests can book available courts
+- QR code check-in for customers and guests
+- Statistics and analytics on court usage
 - Manage bookings and user profiles
-- Admin panel for managing courts and bookings
+- Admin panel for managing user, court, dashboard
+
 
 ## Tech Stack
 
@@ -37,7 +43,7 @@ Ensure you have the following installed:
 
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/your-username/courtstar-platform.git
+    git clone https://github.com/thanhntse/courtstar-platform.git
     cd courtstar-platform
     ```
 
