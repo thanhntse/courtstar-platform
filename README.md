@@ -49,13 +49,13 @@ Ensure you have the following installed:
 
 2. **Backend Setup:**
     ```sh
-    cd Backend
+    cd platform-backend
     ./mvnw spring-boot:run
     ```
 
 3. **Frontend Setup:**
     ```sh
-    cd Frontend
+    cd platform-frontend
     npm install
     npm run dev
     ```
@@ -66,11 +66,11 @@ The frontend application will be available at `http://localhost:3000` and the ba
 
 ```plaintext
 courtstar-platform/
-├── Backend/                # Spring Boot backend code
+├── platform-backend/                # Spring Boot backend code
 │   ├── src/
 │   ├── pom.xml
 │   └── ...
-└── Frontend/               # React frontend code
+└── platform-frontend/               # React frontend code
     ├── src/
     ├── public/
     ├── package.json
