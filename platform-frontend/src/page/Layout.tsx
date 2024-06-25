@@ -11,7 +11,12 @@ const Layout: React.FC = () => {
     <div className="relative">
       <Header />
       <div className="min-h-20">
-        <ToastContainer draggable />
+        <ToastContainer
+          pauseOnHover={false}
+          closeOnClick
+          draggable
+          autoClose={2000}
+        />
       </div>
       <Outlet />
       <Footer />

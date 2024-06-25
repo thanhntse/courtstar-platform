@@ -4,6 +4,7 @@ import InputText from "../../../components/input-text";
 import axiosInstance from '../../../config/axiosConfig';
 import SpinnerLoading from '../../../components/SpinnerLoading';
 import { toast } from 'react-toastify';
+import Pagination from '../../../components/pagination';
 
 type Props = {}
 
@@ -11,9 +12,11 @@ const Staff = (props: Props) => {
 
   const controller = new AbortController();
   const { signal } = controller;
-  const [listStaff, setListStaff] = useState<any>();
+  const [listStaff, setListStaff] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
 
   const load = async () => {
     await axiosInstance.get(`/courtstar/staff`, { signal })
@@ -68,6 +71,13 @@ const Staff = (props: Props) => {
         }
       );
   }
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const indexOfLastStaff = currentPage * itemsPerPage;
+  const indexOfFirstStaff = indexOfLastStaff - itemsPerPage;
+  const currentListStaff = listStaff.slice(indexOfFirstStaff, indexOfLastStaff);
 
   return (
     <div className="py-5 px-7">
@@ -122,7 +132,7 @@ const Staff = (props: Props) => {
           />
           :
           <div className="divide-y-2 font-medium">
-            {listStaff?.map((manager, index) => (
+            {currentListStaff?.map((manager, index) => (
               <div
                 key={manager.account.id}
               >
@@ -135,7 +145,7 @@ const Staff = (props: Props) => {
                   <div className="col-span-4 content-center truncate ml-4">
                     {manager.account.email}
                   </div>
-                  <div className="col-span-3 content-center justify-self-center">
+                  <div className="col-span-3 content-center ml-4">
                     {manager.account.phone}
                   </div>
                   <div className="col-span-1 content-center justify-self-center">
@@ -206,7 +216,15 @@ const Staff = (props: Props) => {
           </div>
         }
       </div>
-
+                  { listStaff.length > itemsPerPage
+                    &&
+                    <Pagination
+                      totalItems={listStaff.length}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={currentPage}
+                      onPageChange={handlePageChange}
+                    />
+                      }
 
     </div>
   )

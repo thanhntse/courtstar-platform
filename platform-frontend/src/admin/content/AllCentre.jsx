@@ -42,7 +42,7 @@ const AllCentre = () => {
     const load = async () => {
       await axiosInstance.get(`/courtstar/centre/allCentre`, { signal })
         .then(res => {
-          setListCentre(res.data.data)
+          setListCentre(res.data.data.reverse())
         })
         .catch(error => {
           console.log(error.message);
@@ -543,7 +543,7 @@ const AllCentre = () => {
       className="py-5 px-7">
         <div className="flex justify-between">
           <div className="text-3xl font-bold">
-            All Centre
+          {t('allCenTre')}
           </div>
         </div>
 

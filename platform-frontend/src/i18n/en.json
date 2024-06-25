@@ -290,5 +290,6 @@
     "centreManager": "Centre Manager",
     "customer": "Customer",
     "withdrawalRequest" : "Withdrawal Request",
-    "postCentreRequest" : "Post Centre Request"
+    "postCentreRequest" : "Post Centre Request",
+    "description": "Description"
 }

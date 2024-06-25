@@ -288,5 +288,6 @@
     "centreManager": "Quản lý",
     "customer": "Khách hàng",
     "withdrawalRequest": "Yêu cầu rút tiền",
-    "postCentreRequest": "Yêu cầu đăng sân"
+    "postCentreRequest": "Yêu cầu đăng sân",
+    "description": "Điểm nổi bật"
 }

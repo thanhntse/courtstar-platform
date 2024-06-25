@@ -173,7 +173,7 @@ const CentreBooking = () => {
                     </div>
                   </div>
                   <div className='w-1/2'>
-                    <span className='font-semibold'>Description:</span>
+                    <span className='font-semibold'>{t('description')}:</span>
                     <div dangerouslySetInnerHTML={{ __html: centre.description }}>
                     </div>
                   </div>

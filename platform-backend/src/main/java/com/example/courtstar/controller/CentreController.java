@@ -35,6 +35,13 @@ public class CentreController {
                 .build();
     }
 
+    @GetMapping("/centre/pending")
+    public ApiResponse<List<CentreResponse>> GetAllPendingCentre(){
+        return ApiResponse.<List<CentreResponse>>builder()
+                .data(centreService.getCentrePending())
+                .build();
+    }
+
 
     @PutMapping("/update/{id}")
     public ApiResponse<CentreResponse> updateCentre(@PathVariable int id, @RequestBody CentreRequest request){

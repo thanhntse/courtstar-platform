@@ -64,7 +64,7 @@ const Header: React.FC = () => {
     const loadNotification = async () => {
       await axiosInstance.get(`/courtstar/notification`)
         .then(res => {
-          setNotification(res.data.data);
+          setNotification(res.data.data.reverse());
         })
         .catch(error => {
           console.log(error.message);
@@ -203,7 +203,7 @@ const Header: React.FC = () => {
               <div className="flex items-center gap-3">
                 <DropdownHeader userEmail={account.email} logout={logout} />
                 <Bell
-                  notifications={notifications?.reverse()}
+                  notifications={notifications}
                 />
               </div>
             )}

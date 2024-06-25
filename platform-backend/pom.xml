@@ -15,6 +15,9 @@
     <description>Courtstar</description>
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -62,7 +65,7 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>9.24.4</version>
+            <version>9.37.2</version>
         </dependency>
 
 

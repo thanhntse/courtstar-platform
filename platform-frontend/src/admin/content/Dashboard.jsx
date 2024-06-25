@@ -171,7 +171,7 @@ const Dashboard = () => {
                 </div>
                 <Counter
                   endNumber={data?.totalCentre}
-                  duration={0}
+                  duration={1000}
                 />
               </div>
               <div className="p-4 border rounded-xl text-2xl font-semibold w-full">
@@ -180,7 +180,7 @@ const Dashboard = () => {
                 </div>
                 <Counter
                   endNumber={data?.totalUser}
-                  duration={0}
+                  duration={1000}
                 />
               </div>
             </div>

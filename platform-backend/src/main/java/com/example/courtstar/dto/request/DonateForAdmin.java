@@ -16,5 +16,5 @@ public class DonateForAdmin {
     private String amount;
 
     @Builder.Default
-    private String callbackUrl="https://2dde-27-78-223-62.ngrok-free.app/courtstar/payment/donate-callback";
+    private String callbackUrl="https://5544-14-161-10-15.ngrok-free.app/courtstar/payment/donate-callback";
 }

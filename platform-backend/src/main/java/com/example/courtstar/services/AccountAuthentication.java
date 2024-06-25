@@ -57,7 +57,7 @@ public class AccountAuthentication {
         Account account = accountService.findByEmail(request.getEmail())
                 .orElseThrow(()-> new AppException(ErrorCode.NOT_FOUND_USER));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        if(!passwordEncoder.matches(request.getPassword(), account.getPassword())) {
+        if(!passwordEncoder.matches(request.getPassword(), account.getPassword()) || account.isDeleted()) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         var token = generateToken(account);
@@ -65,7 +65,6 @@ public class AccountAuthentication {
         return AuthenticationResponse.builder()
                 .token(token)
                 .success(true)
-                .account_id(account.getId())
                 .role(account.getRole().getName())
                 .build();
     }
@@ -169,7 +168,6 @@ public class AccountAuthentication {
         return AuthenticationResponse.builder()
                 .token(token)
                 .success(true)
-                .account_id(user.getId())
                 .role(user.getRole().getName())
                 .build();
     }

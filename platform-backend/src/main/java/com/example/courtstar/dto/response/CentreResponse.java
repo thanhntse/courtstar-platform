@@ -20,10 +20,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CentreResponse {
     int id;
     int managerId;
+    String managerEmail;
     String name;
     String address;
     String district;
-    String link;
     LocalTime openTime;
     LocalTime closeTime;
     double pricePerHour;
