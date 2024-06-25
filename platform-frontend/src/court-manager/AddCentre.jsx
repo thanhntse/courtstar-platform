@@ -161,7 +161,6 @@ function AddCentre(props) {
     name: '',
     address: '',
     district: '',
-    link: '',
     openTime: '',
     closeTime: '',
     pricePerHour: '',
@@ -226,13 +225,9 @@ function AddCentre(props) {
   }, [imgUrls]);
 
   const handleImageChange = (e) => {
-    if (imgUrls.length < 6 && imgUrls.length > 0) {
+    if (imgUrls.length < 6) {
       const selectedImg = e.target.files[0];
       handleImageUpload(selectedImg);
-    } else if (imgUrls.length === 0) {
-      toast.error('Must upload at least 1 photo', {
-        toastId: 'Upload-photo-error'
-      });
     } else {
       toast.error('Only upload a maximum of 6 photos', {
         toastId: 'Upload-photo-error'
@@ -241,6 +236,12 @@ function AddCentre(props) {
   };
 
   const submit = async () => {
+    if (centreForm.images.length === 0) {
+      return toast.error('You must upload at least 1 image', {
+        toastId: 'upload-img-error'
+      });
+    }
+
     await axiosInstance.post(`/courtstar/centre/create`, centreForm)
       .then(res => {
         console.log(res.data);
@@ -259,7 +260,7 @@ function AddCentre(props) {
       .finally();
   }
 
-console.log(centreForm?.description);
+  console.log(centreForm?.description);
 
   const clearForm = () => {
     const deleteImagesPromises = imgUrls.map(img => deleteObject(img.ref));
@@ -270,7 +271,6 @@ console.log(centreForm?.description);
           name: '',
           address: '',
           district: '',
-          link: '',
           openTime: '',
           closeTime: '',
           pricePerHour: '',
@@ -379,16 +379,6 @@ console.log(centreForm?.description);
             items={districts}
             placeholder={t('selectTheDistrict')}
             onSelect={handleSelectDistrict}
-          />
-        </div>
-        <div className="mb-4">
-          <InputText
-            id="link"
-            name="link"
-            placeholder={'Enter your centre map link'}
-            label={'Map link'}
-            value={centreForm.link}
-            onchange={handleChange}
           />
         </div>
         <div className='mb-4'>

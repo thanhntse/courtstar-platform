@@ -4,6 +4,7 @@ import InputText from "../../../components/input-text";
 import axiosInstance from '../../../config/axiosConfig';
 import SpinnerLoading from '../../../components/SpinnerLoading';
 import { toast } from 'react-toastify';
+import Pagination from '../../../components/pagination';
 
 type Props = {}
 
@@ -11,8 +12,10 @@ const Customer = (props: Props) => {
 
   const controller = new AbortController();
   const { signal } = controller;
-  const [listCustomer, setListCustomer] = useState<any>();
+  const [listCustomer, setListCustomer] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
 
   const load = async () => {
     await axiosInstance.get(`/courtstar/customer`, { signal })
@@ -67,6 +70,14 @@ const Customer = (props: Props) => {
       );
   }
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const indexOfLastCustomer = currentPage * itemsPerPage;
+  const indexOfFirstCustomer = indexOfLastCustomer - itemsPerPage;
+  const currentListCustomer = listCustomer.slice(indexOfFirstCustomer, indexOfLastCustomer);
+
   return (
     <div className="py-5 px-7">
       <div className="flex justify-between">
@@ -120,7 +131,7 @@ const Customer = (props: Props) => {
           />
           :
           <div className="divide-y-2 font-medium">
-            {listCustomer?.map((customer, index) => (
+            {currentListCustomer?.map((customer, index) => (
               <div
                 key={customer.id}
               >
@@ -133,7 +144,7 @@ const Customer = (props: Props) => {
                   <div className="col-span-4 content-center truncate ml-4">
                     {customer.email}
                   </div>
-                  <div className="col-span-3 content-center justify-self-center">
+                  <div className="col-span-3 content-center  ml-4">
                     {customer.phone}
                   </div>
                   <div className="col-span-1 content-center justify-self-center">
@@ -204,7 +215,15 @@ const Customer = (props: Props) => {
           </div>
         }
       </div>
-
+      { listCustomer.length > itemsPerPage
+                    &&
+                    <Pagination
+                      totalItems={listCustomer.length}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={currentPage}
+                      onPageChange={handlePageChange}
+                    />
+                      }
 
     </div>
   )

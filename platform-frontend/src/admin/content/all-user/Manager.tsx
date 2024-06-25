@@ -4,6 +4,7 @@ import InputText from "../../../components/input-text";
 import axiosInstance from '../../../config/axiosConfig';
 import SpinnerLoading from '../../../components/SpinnerLoading';
 import { toast } from 'react-toastify';
+import Pagination from '../../../components/pagination';
 
 type Props = {}
 
@@ -11,9 +12,11 @@ const Manager = (props: Props) => {
 
   const controller = new AbortController();
   const { signal } = controller;
-  const [listManager, setListManager] = useState<any>();
+  const [listManager, setListManager] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const load = async () => {
     await axiosInstance.get(`/courtstar/manager`, { signal })
@@ -69,6 +72,14 @@ const Manager = (props: Props) => {
       );
   }
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const indexOfLastManager = currentPage * itemsPerPage;
+  const indexOfFirstManager = indexOfLastManager - itemsPerPage;
+  const currentListManager = listManager.slice(indexOfFirstManager, indexOfLastManager);
+
   return (
     <div className="py-5 px-7">
       <div className="flex justify-between">
@@ -122,7 +133,7 @@ const Manager = (props: Props) => {
           />
           :
           <div className="divide-y-2 font-medium">
-            {listManager?.map((manager, index) => (
+            {currentListManager?.map((manager, index) => (
               <div
                 key={manager.account.id}
               >
@@ -135,7 +146,7 @@ const Manager = (props: Props) => {
                   <div className="col-span-4 content-center truncate ml-4">
                     {manager.account.email}
                   </div>
-                  <div className="col-span-3 content-center justify-self-center">
+                  <div className="col-span-3 content-center  ml-4">
                     {manager.account.phone}
                   </div>
                   <div className="col-span-1 content-center justify-self-center">
@@ -206,7 +217,15 @@ const Manager = (props: Props) => {
           </div>
         }
       </div>
-
+      { listManager.length > itemsPerPage
+                    &&
+                    <Pagination
+                      totalItems={listManager.length}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={currentPage}
+                      onPageChange={handlePageChange}
+                    />
+                      }
 
     </div>
   )

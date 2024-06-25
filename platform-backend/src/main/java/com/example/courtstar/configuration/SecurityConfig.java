@@ -1,7 +1,6 @@
 package com.example.courtstar.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,20 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
@@ -40,9 +28,10 @@ public class SecurityConfig {
     private CustomJwtDecoder customJwtDecoder;
     private final String[] PUBLIC_URLS_POST = {"/account","/account/partner","/auth/token","/auth/introspect"
             ,"/auth/logout","/auth/refresh","/account/reset-password","/booking","/payment/order-status"
-            ,"/payment/donate-callback","/payment/booking-callback","/payment/order-info"};
+            ,"/payment/donate-callback","/payment/booking-callback","/payment/order-info"
+            ,"/tranfermoney/authenticateWithdrawalOrder/{id}"};
     private final String[] PUBLIC_URLS_GET = {"/centre/getAllCentreActive", "/centre/getCentre/{id}","/court/{centreId}/{courtNo}"
-            ,"/feedback/{id}"};
+            ,"/feedback/{id}","/tranfermoney/getAllSuccess"};
     private final String[] PUBLIC_URLS_PUT = {"/account/regenerate-otp"};
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -80,7 +69,4 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return  new BCryptPasswordEncoder(10);
     }
-
-
-
 }

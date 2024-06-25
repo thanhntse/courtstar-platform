@@ -177,7 +177,7 @@ const Sidebar = (props) => {
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          class="lucide lucide-ticket-check"
+                          className="lucide lucide-ticket-check"
                         >
                           <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
                           <path d="m9 12 2 2 4-4" />
@@ -223,15 +223,28 @@ const Sidebar = (props) => {
                     </div>
                   }
 
-                  <div
-                    onClick={() => handleSelectTab(2)}
-                    className=
-                    {tab === 2
-                      ? 'flex gap-2 cursor-pointer rounded-md px-3 bg-gray-800 text-white'
-                      : 'flex gap-2 cursor-pointer rounded-md hover:px-3 hover:bg-gray-800 hover:text-white ease-in-out duration-300'
-                    }
-                  >
-
+                      <div
+                        onClick={() => handleSelectTab(2)}
+                        className=
+                        {tab === 2
+                          ? 'flex gap-2 items-center cursor-pointer py-1 rounded-md px-3 bg-gray-800 text-white'
+                          : 'flex gap-2 items-center cursor-pointer py-1 rounded-md hover:px-3 hover:bg-gray-800 hover:text-white ease-in-out duration-300'
+                        }
+                      >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20" height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-ticket-check"
+                    >
+                      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
                     Check in
                   </div>
                 </div>

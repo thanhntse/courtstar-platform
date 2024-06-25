@@ -48,7 +48,7 @@ const Bell: React.FC<NotificationProps> = ({ notifications }) => {
               {notifications?.length === 0 && (
                 <p className="text-gray-500">No new notifications</p>
               )}
-              <div className="mt-2">
+              <div className="mt-2 max-h-[400px] overflow-y-auto">
                 {notifications?.map((notification) => (
                   <NotificationItem
                     key={notification.id}

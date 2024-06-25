@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axiosInstance from '../../config/axiosConfig'
 
 type Props = {}
 

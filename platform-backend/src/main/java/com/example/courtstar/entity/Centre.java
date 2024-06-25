@@ -56,7 +56,7 @@ public class Centre {
 
     @Column(name = "status")
     @Builder.Default
-    boolean status = true;
+    boolean status = false;
 
     @Column(name = "approve_date")
     LocalDate approveDate;
@@ -68,9 +68,6 @@ public class Centre {
     @Column(name = "current_rate")
     @Builder.Default
     double currentRate = 0;
-
-    @Column(name = "link")
-    String link;
 
     @OneToMany(mappedBy = "centre", cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
@@ -112,9 +109,6 @@ public class Centre {
     @Builder.Default
     @Column(name = "deleted")
     boolean deleted = false;
-
-    @OneToOne
-    PaymentMethod paymentMethod;
 
 }
 

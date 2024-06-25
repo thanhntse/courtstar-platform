@@ -97,7 +97,9 @@ const Centre: React.FC<{ selectedDistrict: string }> = ({ selectedDistrict }) =>
           </div>
 
           {loading ? (
-            <SpinnerLoading color='#2B5A50' />
+            <div className='flex items-center justify-center h-[400px]'>
+              <SpinnerLoading color='#2B5A50' />
+            </div>
           ) : (
             <div className='flex gap-5 w-full'>
               <div>
@@ -122,7 +124,7 @@ const Centre: React.FC<{ selectedDistrict: string }> = ({ selectedDistrict }) =>
                   }
                 </div>
               ) : (
-                    <div className='flex flex-col items-center justify-center h-96 text-3xl text-primary mx-auto'>
+                    <div className='flex flex-col items-center justify-center text-3xl text-primary mx-auto'>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="250" height="250"
