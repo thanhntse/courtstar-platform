@@ -1,0 +1,5 @@
+.Toastify__toast-container--top-right {
+  position: fixed !important;
+  top: 80px !important;
+  right: 0 !important;
+}

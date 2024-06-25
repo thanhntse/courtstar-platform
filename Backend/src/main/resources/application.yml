@@ -1,0 +1,64 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /courtstar
+spring:
+  datasource:
+    url: jdbc:sqlserver://courtstar.database.windows.net:1433;database=courtstarv4;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: adminv4
+    password: Aa@123456
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: minhoan305@gmail.com
+    password: jfcr heji pmzn bmzu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
+      mode: HTML
+      encoding: UTF-8
+      cache: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 1099077344805-af8jknff9pfv2hfvffu3b521p1sgdja0.apps.googleusercontent.com
+            client-secret: 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
+  main:
+    allow-circular-references: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+jwt:
+  signerKey: "OpLoSIHROWo8482Fsk63QXj/jNb95u9Xl2ZZyUDKQwN687kCVo5FVVFBdbQfcqXJ"
+  valid-duration: 3600
+  refreshable-duration: 36000
+
+payment:
+  zalopay:
+    APP_ID: "2553"
+    KEY1: "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL"
+    KEY2: "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz"
+    ORDER_CREATE_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/create"
+    ORDER_STATUS_ENDPOINT: "https://sandbox.zalopay.com.vn/v001/tpe/getstatusbyapptransid"
+    REFUND_PAYMENT_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/refund"
+    REFUND_STATUS_PAYMENT_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/query_refund"
+
+

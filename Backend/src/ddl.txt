@@ -1,0 +1,205 @@
+create database courtstarv3
+
+use courtstarv3
+
+create table guest
+(
+  id int identity(1, 1) primary key,
+  email varchar(80) not null,
+  full_name nvarchar(80),
+  phone char(10),
+  create_date date
+)
+
+create table role
+(
+    name varchar(15) primary key,
+    description varchar(255)
+);
+
+create table account
+(
+  id int identity(1, 1) primary key,
+  email varchar(80) not null,
+  password text,
+  first_name nvarchar(30),
+  last_name nvarchar(50),
+  phone char(10),
+  deleted bit not null,
+  role_name varchar(15) foreign key references role(name),
+  create_date date
+);
+
+create table otp
+(
+  id int identity(1, 1) primary key,
+  otp char(6),
+  otp_generated_time datetime,
+  account_id int unique foreign key references account(id)
+);
+
+create table invalidated_token
+(
+    id varchar(255) primary key,
+    expiry_time datetime
+);
+
+create table permission
+(
+    name varchar(255) primary key,
+    description varchar(255)
+);
+
+create table role_permissions
+(
+    role_name varchar(15) not null foreign key references role(name),
+    permissions_name varchar(255) not null foreign key references permission(name),
+    primary key (role_name, permissions_name),
+);
+
+create table centre_manager
+(
+  id int identity(1,1) primary key,
+  address nvarchar(255),
+  current_balance money,
+  account_id int unique foreign key references account(id)
+);
+
+create table payment_method
+(
+	id int identity(1, 1) primary key,
+	name varchar(30),
+	number varchar(30),
+);
+
+create table centre
+(
+  id int identity(1, 1) primary key,
+  name nvarchar(50),
+  address nvarchar(100),
+  district varchar(30),
+  open_time time,
+  close_time time,
+  price_per_hour money,
+  slot_duration int,
+  number_of_courts int,
+  description nvarchar(255),
+  status bit,
+  approve_date date,
+  manager_id int foreign key references centre_manager(id),
+  revenue money,
+  payment_method_id int unique foreign key references payment_method(id),
+  deleted bit not null,
+  link text,
+  current_rate float
+);
+
+create table centre_staff
+(
+  id int identity (1,1) primary key,
+  centre_id int foreign key references centre(id),
+  account_id int unique foreign key references account(id)
+);
+
+create table court
+(
+  id int identity(1,1) primary key,
+  court_no int,
+  status bit,
+  centre_id int foreign key references centre(id),
+);
+
+create table slot
+(
+  id int identity(1,1) primary key,
+  slot_no int,
+  start_time time,
+  end_time time,
+  centre_id int foreign key references centre(id),
+);
+
+create table slot_unavailable
+(
+  id int identity(1,1) primary key,
+  date date,
+  slot_id int foreign key references slot(id),
+  court_id int foreign key references court(id),
+);
+
+create table booking_schedule
+(
+  id int identity(1,1) primary key,
+  date date,
+  total_price money,
+  status bit,
+  account_id int foreign key references account(id),
+  guest_id int foreign key references guest(id),
+  slot_id int foreign key references slot(id),
+  court_id int foreign key references court(id),
+  success bit
+);
+
+create table feedback
+(
+  id int identity(1,1) primary key,
+  content nvarchar(255),
+  create_date date,
+  rate int,
+  account_id int foreign key references account(id),
+  centre_id int foreign key references centre(id),
+  booking_schedule_id int unique foreign key references booking_schedule(id),
+);
+
+create table image
+(
+  id int identity(1,1) primary key,
+  image_no int,
+  url text,
+  centre_id int foreign key references centre(id)
+);
+
+create table payment
+(
+  id int identity(1,1) primary key,
+  transaction_code varchar(255),
+  date date,
+  status bit,
+  booking_schedule_id int unique foreign key references booking_schedule(id)
+);
+
+create table notification
+(
+  id int identity(1,1) primary key,
+  date date,
+  type varchar(20),
+  content varchar(255),
+  status bit,
+  account_id int foreign key references account(id)
+);
+
+
+
+
+
+
+-- Create permissions
+-- INSERT INTO permission (name, description) VALUES ('READ_PRIVILEGE', 'Allows reading');
+-- INSERT INTO permission (name, description) VALUES ('WRITE_PRIVILEGE', 'Allows writing');
+
+-- Create roles and associate permissions
+INSERT INTO role (name, description) VALUES ('ADMIN', 'Administrator role');
+INSERT INTO role (name, description) VALUES ('MANAGER', 'Manager role');
+INSERT INTO role (name, description) VALUES ('STAFF', 'Staff role');
+INSERT INTO role (name, description) VALUES ('CUSTOMER', 'Customer role');
+
+-- Assuming you have a join table for role and permission
+-- INSERT INTO role_permissions (role_id, permission_id) VALUES ('ADMIN', 'READ_PRIVILEGE');
+-- INSERT INTO role_permissions (role_id, permission_id) VALUES ('ADMIN', 'WRITE_PRIVILEGE');
+-- INSERT INTO role_permissions (role_id, permission_id) VALUES ('MANAGER', 'READ_PRIVILEGE');
+-- INSERT INTO role_permissions (role_id, permission_id) VALUES ('STAFF', 'READ_PRIVILEGE');
+-- INSERT INTO role_permissions (role_id, permission_id) VALUES ('CUSTOMER', 'READ_PRIVILEGE');
+
+-- Create accounts and associate roles, pass 123
+INSERT INTO account (email, password, phone, first_name, last_name, deleted, role_name) VALUES ('thanh@gmail.com', '$2a$10$wVJxdHDOO/dY.WgpWNa7c.fIS8fJ5kle.09DfHUTy5q4bWX0z.vsK', '1234567890', 'Thanh', 'Nguyen', 0, 'ADMIN');
+INSERT INTO account (email, password, phone, first_name, last_name, deleted, role_name) VALUES ('manager@gmail.com', '$2a$10$wVJxdHDOO/dY.WgpWNa7c.fIS8fJ5kle.09DfHUTy5q4bWX0z.vsK', '1234567891', 'Manager', 'User', 0, 'MANAGER');
+INSERT INTO account (email, password, phone, first_name, last_name, deleted, role_name) VALUES ('customer@gmail.com', '$2a$10$wVJxdHDOO/dY.WgpWNa7c.fIS8fJ5kle.09DfHUTy5q4bWX0z.vsK', '1234567892', 'Customer', 'User', 0, 'CUSTOMER');

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Booking Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        p {
+            line-height: 1.6;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 8px 0;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .value {
+            margin-left: 10px;
+        }
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Booking Information</h1>
+    <p>Dear <span th:text="${name}">[Name]</span>,</p>
+    <p>Thank you for your booking. Here are your booking details:</p>
+    <ul>
+        <li><span class="label">Email:</span><span class="value" th:text="${email}">[Email]</span></li>
+        <li><span class="label">Centre Name:</span><span class="value" th:text="${centreName}">[Centre Name]</span></li>
+        <li><span class="label">Centre Address:</span><span class="value" th:text="${centreAddress}">[Centre Address]</span></li>
+        <li><span class="label">Date:</span><span class="value" th:text="${date}">[Date]</span></li>
+        <li><span class="label">Court Number:</span><span class="value" th:text="${courtNo}">[Court No]</span></li>
+        <li><span class="label">Price:</span><span class="value" th:text="${price}">[Price]</span></li>
+        <li><span class="label">Slot:</span><span class="value" th:text="${slot.slotNo + ' (' + slot.startTime + ' - ' + slot.endTime + ')'}">[Slot]</span></li>
+    </ul>
+    <p>Scan the following QR code to check in:</p>
+    <div class="qr-code">
+        <img th:src="'cid:' + ${qrCodeContentId}" alt="QR Code"/>
+    </div>
+    <p>Thank you for choosing our service!</p>
+</div>
+</body>
+</html>

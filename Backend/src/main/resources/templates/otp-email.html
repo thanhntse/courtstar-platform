@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your OTP Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .header {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid #dddddd;
+            border-radius: 10px;
+            background-color: #2B5A50;
+            color: #ffffff;
+        }
+        h1 {
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .otp-code {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cccccc;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #dddddd;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Your OTP Code</h1>
+    </div>
+    <div class="content">
+        <p>Hi <span th:text="${name}"></span>,</p>
+        <p>For your security, please use the following One-Time Password (OTP) to complete your password reset on our platform:</p>
+        <div class="otp-code" th:text="${otp}"></div>
+        <p>This code is valid for the next 3 minutes. If you did not request this code, please ignore this email and ensure your account is secure.</p>
+        <p><strong>Please do not share this code with anyone.</strong></p>
+        <p>If you have any questions or need assistance, feel free to contact our support team.</p>
+        <p>Thank you,<br>CourtStar<br>courtstar.se@gmail.com</p>
+    </div>
+    <div class="footer">
+        <p>This email was sent to <span th:text="${email}"></span> in response to your request on
+            <span id="currentDateTime"></span>.
+            If you did not make this request, please contact our support team immediately.</p>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const formattedDateTime = now.toLocaleDateString('en-US', options);
+        document.getElementById('currentDateTime').textContent = formattedDateTime;
+    });
+</script>
+</body>
+</html>

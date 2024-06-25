@@ -1,0 +1,46 @@
+/* src/components/MyCarousel.css */
+.carousel-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.carousel.carousel-slider {
+  border-radius: 8px;
+}
+
+.thumbs-wrapper {
+  margin-top: 10px !important;
+  margin-bottom: 0px !important;
+  border-radius: 6px;
+}
+
+.thumbs {
+  margin: auto;
+  border-radius: 6px;
+  background-color: white;
+  width: fit-content;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: center;
+  padding: 6px 6px;
+}
+
+.thumb {
+  margin: 0 2px !important;
+  border: none !important;
+  width: 112px !important;
+  height: 66px !important;
+  transition: all !important;
+  transition-duration: 150ms !important;
+  transition-timing-function: ease-in-out !important;
+}
+
+.thumb.selected {
+  border: none !important;
+  scale: 95%;
+}
+
+.thumb:hover {
+  border: none !important;
+  scale: 95%;
+}
