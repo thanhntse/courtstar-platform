@@ -4,6 +4,10 @@
 
 This project is a platform for booking badminton courts. The frontend is built using Vite with React, TypeScript, and styled using TailwindCSS, while the backend is powered by Spring Boot.
 
+## Deployment
+
+[CourtStar](https://courtstar-platform-frontend.vercel.app/)
+
 ## Features
 
 
