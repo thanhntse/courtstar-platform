@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface BookingScheduleRepository extends JpaRepository<BookingSchedule, Integer> {
-    @Query("SELECT bs FROM BookingSchedule bs JOIN bs.slot s JOIN s.centre c WHERE c.id = :centreId")
+    @Query("SELECT bs FROM BookingSchedule bs JOIN BookingDetail bd ON bd.bookingSchedule.id=bs.id " +
+            "JOIN bd.slot s JOIN s.centre c WHERE c.id = :centreId")
     List<BookingSchedule> findAllByCentreId(@Param("centreId") int centreId);
+
     List<BookingSchedule> findAllByAccountId(int accountId);
 }

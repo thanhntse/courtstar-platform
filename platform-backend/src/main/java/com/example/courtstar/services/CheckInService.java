@@ -1,11 +1,10 @@
 package com.example.courtstar.services;
 
 import com.example.courtstar.dto.response.AccountResponse;
-import com.example.courtstar.entity.Account;
-import com.example.courtstar.entity.BookingSchedule;
-import com.example.courtstar.entity.Slot;
+import com.example.courtstar.entity.*;
 import com.example.courtstar.exception.AppException;
 import com.example.courtstar.exception.ErrorCode;
+import com.example.courtstar.repositories.BookingDetailRepository;
 import com.example.courtstar.repositories.BookingScheduleRepository;
 import com.example.courtstar.repositories.SlotRepository;
 import lombok.AccessLevel;
@@ -28,6 +27,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Service;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -38,52 +41,59 @@ import org.springframework.stereotype.Service;
 public class CheckInService {
 
     @Autowired
-    private final BookingScheduleRepository bookingScheduleRepository;
+    private BookingDetailRepository bookingDetailRepository;
     @Autowired
-    private final BookingService bookingService;
-    @Autowired
-    private final AccountService accountService;
-    @Autowired
-    private final SlotRepository slotRepository;
+    private BookingScheduleRepository bookingScheduleRepository;
 
-    public Boolean checkIn(int bookingScheduleId) {
-        boolean result = false;
-        BookingSchedule bookingSchedule = bookingScheduleRepository.findById(bookingScheduleId).orElse(null);
+    public Integer checkInQR(int bookingId) {
+        int result = 0;
+        BookingSchedule bookingSchedule = bookingScheduleRepository.findById(bookingId).orElse(null);
+
         if (bookingSchedule != null) {
-            bookingSchedule.setStatus(true);
-            bookingScheduleRepository.save(bookingSchedule);
+            List<BookingDetail> bookingDetails = bookingSchedule.getBookingDetails();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH");
+            ZonedDateTime gmtDateTime = ZonedDateTime.now(ZoneId.of("GMT"));
+            String currentDateTime = gmtDateTime.plusHours(7).format(formatter);
+
+            for (BookingDetail bookingDetail : bookingDetails) {
+                LocalDate bookingDate = bookingDetail.getDate();
+                LocalTime startTime = bookingDetail.getSlot().getStartTime();
+
+                ZonedDateTime bookingDateTime = ZonedDateTime.of(bookingDate, startTime, ZoneId.of("GMT+7"));
+                String bookingTimeString = bookingDateTime.format(formatter);
+
+                if (bookingTimeString.equals(currentDateTime)) {
+                    bookingDetail.setCheckedIn(true);
+                    bookingDetailRepository.save(bookingDetail);
+                    result = bookingDetail.getId();
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    public Boolean checkIn(int bookingDetailId) {
+        boolean result = false;
+        BookingDetail bookingDetail = bookingDetailRepository.findById(bookingDetailId).orElse(null);
+        if (bookingDetail != null) {
+            bookingDetail.setCheckedIn(true);
+            bookingDetailRepository.save(bookingDetail);
             result = true;
         }
         return result;
     }
 
-    public Boolean undoCheckIn(int bookingScheduleId) {
+    public Boolean undoCheckIn(int bookingDetailId) {
         boolean result = false;
-        BookingSchedule bookingSchedule = bookingScheduleRepository.findById(bookingScheduleId).orElse(null);
-        if (bookingSchedule != null) {
-            bookingSchedule.setStatus(false);
-            bookingScheduleRepository.save(bookingSchedule);
+        BookingDetail bookingDetail = bookingDetailRepository.findById(bookingDetailId).orElse(null);
+        if (bookingDetail != null) {
+            bookingDetail.setCheckedIn(false);
+            bookingDetailRepository.save(bookingDetail);
             result = true;
         }
         return result;
     }
-  
-//    public boolean checkInBooking(String email, int court_id, int slotId){
-//        Account account = accountService.getAccountByEmail1(email);
-//        if(account == null){
-//            throw new AppException(ErrorCode.NOT_FOUND_USER);
-//        }
-//        BookingSchedule service = bookingService.getBookingSchedule(account.getId());
-//        Slot slot = slotRepository.findById(slotId).orElse(null);
-//
-//        boolean checkIn = false;
-//        if(service.getCourt().isStatus()==false
-//                && service.getCourt().getId()==court_id
-//                && service.getSlot()==slot){
-//            service.setStatus(true);
-//            bookingScheduleRepository.save(service);
-//            checkIn = true;
-//        }
-//        return checkIn;
-//    }
+
 }

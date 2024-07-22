@@ -24,6 +24,8 @@ public class TransferMoney {
     boolean status;
     LocalDateTime dateCreateWithdrawalOrder;
     LocalDateTime dateAuthenticate;
+    String cardHolderName;
+    String description;
 
     @ManyToOne
     @JsonIgnore

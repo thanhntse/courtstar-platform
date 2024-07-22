@@ -17,7 +17,7 @@ const Centre: React.FC<{ selectedDistrict: string }> = ({ selectedDistrict }) =>
   const [selectedRating, setSelectedRating] = useState(0);
   const [isRatingFilterActive, setIsRatingFilterActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const controller = new AbortController();

@@ -14,10 +14,8 @@ import java.util.List;
 @Builder
 public class AccountUpdateRequest {
     //NotNull
-    @Size(min = 6,message = "PASSWORD_INVALID")
     String password;
     //@NotNull
-    @Size(min=10,max = 10,message = "PHONE_INVALID")
     String phone;
     String firstName;
     String lastName;

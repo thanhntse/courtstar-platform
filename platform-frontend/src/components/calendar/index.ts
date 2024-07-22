@@ -1,8 +1,16 @@
 import Calendar from "./Calendar";
 
+
+
 export interface Item {
   key: any;
   label: string
+}
+
+export interface BookingDetail {
+  date: string;
+  slotId: string | number;
+  courtId: string | number
 }
 
 export interface CalendarProps {
@@ -24,6 +32,9 @@ export interface CalendarHeaderProps {
   typeOfCalendar: 'booking' | 'manage';
   formCalendar: any;
   handleButton: (formCalendar: any) => void;
+  handleReset: () => void;
+  handleWeeklyBooking: (number: number, status: boolean) => void;
+  existSelection: boolean
 }
 
 export interface Slot {

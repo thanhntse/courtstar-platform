@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Sidebar from './Sidebar';
+import { useEffect, useState } from 'react';
 import axiosInstance from '../config/axiosConfig';
 import SpinnerLoading from '../components/SpinnerLoading';
-import AddCentre from './AddCentre';
-import Content from './Content';
+import Content from './layout/Content';
 import { useAuth } from '../context/AuthContext';
+import AddCentre from './content/centre/AddCentre';
+import Sidebar from './layout/Sidebar';
 
 const MyCentre = () => {
 

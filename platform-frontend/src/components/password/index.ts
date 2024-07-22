@@ -1,8 +1,8 @@
 import Password from "./password";
 
 export interface PasswordStrengthProps {
-  password: string;
-  evaluate: boolean;
+  password: string | undefined;
+  evaluate: boolean | undefined;
 }
 
 export interface PasswordProps {
@@ -13,6 +13,8 @@ export interface PasswordProps {
   onchange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   evaluate?: boolean;
+  error?: boolean;
+  errorMsg?: string;
 }
 
 export default Password;

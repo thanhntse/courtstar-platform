@@ -48,7 +48,7 @@ const CentreCard: React.FC<{ centre: CentreProps }> = ({ centre }) => {
         </div>
         <div className='text-sm flex justify-center gap-20'>
           <Button
-            label={t('centreDetail')}
+            label={t('viewDetail')}
             fullWidth
             size='mini'
             className='border border-gray-800 font-semibold hover:text-white hover:bg-gray-800'

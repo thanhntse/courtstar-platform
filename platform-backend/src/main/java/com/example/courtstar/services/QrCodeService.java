@@ -8,5 +8,5 @@ import jakarta.mail.MessagingException;
 import java.io.IOException;
 
 public interface QrCodeService {
-    String generateQrCode(int bookingScheduleId) throws IOException, WriterException, MessagingException;
+    String generateQrCode(int bookingScheduleId, String appTransId) throws IOException, WriterException, MessagingException;
 }

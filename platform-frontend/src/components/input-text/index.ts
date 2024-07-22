@@ -9,6 +9,8 @@ export interface InputTextProps {
   value: string;
   disabled?: boolean;
   type?: 'text' | 'number';
+  error?: boolean;
+  errorMsg?: string;
 }
 
 export default InputText;

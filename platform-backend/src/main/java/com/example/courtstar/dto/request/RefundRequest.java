@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefundRequest {
-    private String zpTransId;
-    private Long amount;
+    private int bookingId;
     private String description;
 }

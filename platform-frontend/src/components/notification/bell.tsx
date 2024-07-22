@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import bell from '../../assets/images/bell.svg';
 import { Notification, NotificationProps } from "./index";
 import NotificationItem from './notification';
+import axiosInstance from '../../config/axiosConfig';
 
 const Bell: React.FC<NotificationProps> = ({ notifications }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +18,13 @@ const Bell: React.FC<NotificationProps> = ({ notifications }) => {
     }
   };
 
-  const handleNotificationClick = (notification: Notification) => {
-    console.log("Seen", notification.id);
+  const handleNotificationClick = async (notification: Notification) => {
+    try {
+      await axiosInstance.put(`/courtstar/notification/${notification.id}`);
+      console.log(`Seen notification ${notification.id} successfully!`);
+    } catch (error) {
+      console.error("Error updating notification status", error);
+    }
   }
 
   useEffect(() => {

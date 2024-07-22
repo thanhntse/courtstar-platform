@@ -2,7 +2,7 @@ package com.example.courtstar.controller;
 
 import com.example.courtstar.dto.request.*;
 import com.example.courtstar.dto.response.BookingScheduleResponse;
-import com.example.courtstar.services.payment.*;
+import com.example.courtstar.services.paymentZalopay.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://courtstar-platform-frontend.vercel.app/"})
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
@@ -92,15 +91,15 @@ public class PaymentController {
 
 
 
-    @PostMapping("/refund-payment")
+    @PostMapping("/refund")
     public ResponseEntity<Map<String, Object>> sendRefundRequest(@RequestBody RefundRequest refundRequestDTO) throws org.json.JSONException, IOException {
 
         Map<String, Object> result = this.refundPaymentService.sendRefund(refundRequestDTO);
-        return new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
-    @PostMapping("/get-refund-status")
+    @PostMapping("/refund-status")
     public ResponseEntity<Map<String, Object>> getStatusRefund(@RequestBody RefundStatusRequest refundStatusDTO) throws org.json.JSONException, IOException, URISyntaxException {
 
         Map<String, Object> result =  this.refundStatusService.getStatusRefund(refundStatusDTO);

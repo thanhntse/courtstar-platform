@@ -32,6 +32,8 @@ function CustomerRegister() {
     lastName: ''
   });
 
+  const [formError, setFormError] = useState(false);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormCustomerRegister((prevForm) => ({
@@ -41,6 +43,10 @@ function CustomerRegister() {
   };
 
   const handleRegister = async () => {
+    if (Object.values(formCustomerRegister).some(value => value === '')) {
+      setFormError(true);
+      return;
+    }
     setLoading(true);
     await axiosInstance.post(`/courtstar/account`, formCustomerRegister)
       .then(res => {
@@ -106,6 +112,8 @@ function CustomerRegister() {
                   label={t('firstName')}
                   value={formCustomerRegister.firstName}
                   onchange={handleChange}
+                  error={formError && !formCustomerRegister.firstName}
+                  errorMsg={t('plsEnterFirstName')}
                 />
                 <InputText
                   id="lastName"
@@ -114,6 +122,8 @@ function CustomerRegister() {
                   label={t('lastName')}
                   value={formCustomerRegister.lastName}
                   onchange={handleChange}
+                  error={formError && !formCustomerRegister.lastName}
+                  errorMsg={t('plsEnterLastName')}
                 />
               </div>
               <div className='mb-4'>
@@ -124,6 +134,8 @@ function CustomerRegister() {
                   label="Email*"
                   value={formCustomerRegister.email}
                   onchange={handleChange}
+                  error={formError && !formCustomerRegister.email}
+                  errorMsg={t('plsEnterEmail')}
                 />
               </div>
               <div className='mb-4'>
@@ -134,6 +146,8 @@ function CustomerRegister() {
                   label={t('phone')}
                   value={formCustomerRegister.phone}
                   onchange={handleChange}
+                  error={formError && !formCustomerRegister.phone}
+                  errorMsg={t('plsEnterPhone')}
                 />
               </div>
               <div className='mb-6'>
@@ -145,10 +159,16 @@ function CustomerRegister() {
                   value={formCustomerRegister.password}
                   onchange={handleChange}
                   evaluate={true}
+                  error={formError && !formCustomerRegister.password}
+                  errorMsg={t('plsEnterPassword')}
                 />
-                <div className='text-gray-500 text-xs py-1 px-0.5'>
-                  {t('conditionPassword')}
-                </div>
+                {!(formError && !formCustomerRegister.password)
+                  &&
+                  <div className='text-gray-500 text-xs py-1 px-0.5'>
+                    {t('conditionPassword')}
+                  </div>
+                }
+
               </div>
               <div className='flex items-center justify-center mb-5'>
                 <div className='flex items-center h-5'>
@@ -171,7 +191,7 @@ function CustomerRegister() {
                     size='large'
                     fullRounded
                     fullWidth
-                    className='bg-primary-green hover:bg-teal-900 text-white'
+                    className='bg-primary-green hover:bg-teal-900 text-white shadow'
                     disabled={!isChecked}
                     onClick={handleRegister}
                     loading={loading}
@@ -180,10 +200,8 @@ function CustomerRegister() {
               </div>
               <div className='flex justify-center my-5 '>
                 <a
-                  className="text-sm border border-black rounded-full py-3 px-4 w-96 inline-flex items-center hover:bg-gray-200 transition-all duration-300 ease-in-out"
+                  className="text-sm border shadow rounded-full py-3 px-4 w-96 inline-flex items-center hover:bg-gray-200 transition-all duration-300 ease-in-out"
                   href='http://localhost:8080/courtstar/account/createEmail'
-                  target='_blank'
-                  rel="noreferrer"
                 >
                   <img className='mx-7'
                     src={google}

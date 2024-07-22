@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../config/i18n'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "../page/Layout";

@@ -25,7 +25,8 @@ public enum ErrorCode {
     NOT_FOUND_NOTIFICATION(1015,"not found any notification",HttpStatus.NOT_FOUND),
     NOT_FOUND_TRANSFER_MONEY(1016,"not found transfer money",HttpStatus.NOT_FOUND),
     NOT_ENOUGHT_MONEY(1017,"not enought money",HttpStatus.BAD_REQUEST),
-    TRANFER_MONEY_SUCCESS(1018,"tranfer money success",HttpStatus.BAD_REQUEST)
+    TRANFER_MONEY_SUCCESS(1018,"tranfer money success",HttpStatus.BAD_REQUEST),
+    INVALID_SLOT_BOOKING(1019,"invalid slot booking",HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode httpStatusCode) {

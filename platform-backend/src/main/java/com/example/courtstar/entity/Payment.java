@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -22,11 +23,20 @@ public class Payment {
     @Column(name="transaction_code")
     String transactionCode;
 
+    @Column(name="zp_trans_id")
+    String zpTransId;
+
+    @Column(name="vnp_trans_id")
+    String vnpTransId;
+
     @Column(name = "date")
-    LocalDate date;
+    LocalDateTime date;
 
     @Column(name = "status")
     boolean status;
+
+    @Column(name = "amount")
+    double amount;
 
     @OneToOne
     BookingSchedule bookingSchedule;

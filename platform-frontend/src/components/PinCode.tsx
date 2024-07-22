@@ -22,7 +22,7 @@ const PinCode: React.FC<PinCodeProps> = (props) => {
       ref={pinRef}
       length={6}
       initialValue={props.value}
-      onChange={(value, index) => props.onChange(value)}
+      onChange={(value) => props.onChange(value)}
       type="numeric"
       inputMode="numeric"
       style={{

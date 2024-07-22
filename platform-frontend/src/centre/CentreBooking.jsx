@@ -104,19 +104,38 @@ const CentreBooking = () => {
                   <div className='text-3xl font-semibold'>
                     {centre.name}
                   </div>
-                  <div className='flex gap-2 my-3'>
-                    <Rating
-                      ratingWrapper='flex gap-1'
-                      value={centre.currentRate}
-                      editable={false}
-                    />
-                    <div className='text-base'>
-                      ({feedbackList.length})
-                    </div>
-                  </div>
+
+                  <>
+                    {
+                      centre.currentRate > 0
+                      ?
+                      <div className='flex gap-2 my-3'>
+                        <Rating
+                          ratingWrapper='flex gap-1'
+                          value={centre.currentRate}
+                          editable={false}
+                        />
+                        <div className='text-base'>
+                          (
+                            {feedbackList.length + " "}
+
+                            {
+                              feedbackList.length == 1
+                              ?
+                              t('feedback')
+                              :
+                              t('feedbacks')
+                            }
+                          )
+                        </div>
+                      </div>
+                      :
+                      ""
+                    }
+                  </>
                 </div>
                 <Button
-                  label='Book now'
+                  label={t('bookNow')}
                   size='medium'
                   className='bg-primary-green hover:bg-teal-900 text-white'
                   icon={
@@ -131,7 +150,7 @@ const CentreBooking = () => {
 
                   <div className="rounded-lg shadow-gray-400 shadow-md">
                     <div className='text-white rounded-t-lg bg-primary-green flex items-center justify-center gap-1.5 py-2'>
-                      <span className='text-3xl font-medium'>Address</span>
+                      <div className='text-3xl font-medium'>{t('address')}</div>
                     </div>
                     <div className='bg-white rounded-b-lg p-5'>
                       <div className='font-medium mb-5'>
@@ -154,21 +173,21 @@ const CentreBooking = () => {
 
               <div className='rounded-lg shadow-gray-400 shadow-md'>
                 <div className='text-white rounded-t-lg bg-primary-green flex items-center justify-center gap-1.5 py-2'>
-                  <span className='text-3xl font-medium'>Centre Detail</span>
+                  <span className='text-3xl font-medium'>{t('information')}</span>
                 </div>
                 <div className="bg-white p-5 flex rounded-b-lg">
                   <div className='flex flex-col gap-3 w-1/2'>
                     <div className=''>
-                      <span className='font-semibold'>Open time: </span>
+                      <span className='font-semibold'>{t('openTime')}: </span>
                       {`${moment(centre.openTime, "HH:mm:ss").format("H")}h
                     - ${moment(centre.closeTime, "HH:mm:ss").format("H")}h`}
                     </div>
                     <div className=''>
-                      <span className='font-semibold'>Number of courts: </span>
+                      <span className='font-semibold'>{t('numberOfCourts')}: </span>
                       {centre.numberOfCourts}
                     </div>
                     <div>
-                      <span className='font-semibold'>Price: </span>
+                      <span className='font-semibold'>{t('price')}: </span>
                       <span className='font-semibold text-rose-600'>{centre?.pricePerHour?.toLocaleString('de-DE')} VND/h</span>
                     </div>
                   </div>
@@ -183,7 +202,7 @@ const CentreBooking = () => {
 
               <div id="book" className='flex-1 rounded-lg shadow-gray-400 shadow-md'>
                 <div className='text-white rounded-t-lg bg-primary-green flex items-center justify-center gap-1.5 py-2'>
-                  <span className='text-3xl font-medium'>Booking</span>
+                  <span className='text-3xl font-medium'>{t('calendar')}</span>
                 </div>
                 <div className='bg-white rounded-b-lg p-8 pt-0'>
                   <div className="">

@@ -3,7 +3,6 @@ package com.example.courtstar.exception;
 import com.example.courtstar.dto.request.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,14 +39,14 @@ public class GlobleHandlingException {
                 .build();
         return ResponseEntity.status(errorCode.getHttpStatusCode()).body(response);
     }
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException e) {
-        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
-                ApiResponse.builder()
-                        .message(errorCode.getMessage())
-                        .code(errorCode.getCode())
-                        .build()
-        );
-    }
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException e) {
+//        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+//        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
+//                ApiResponse.builder()
+//                        .message(errorCode.getMessage())
+//                        .code(errorCode.getCode())
+//                        .build()
+//        );
+//    }
 }

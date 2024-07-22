@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../assets/images/logo.svg';
+import logo from '/logo.svg';
 import LanguageSelector from '../components/LanguageSelector';
 import Login from '../auth/Login';
 import axiosInstance from '../config/axiosConfig';
@@ -9,11 +9,13 @@ import Bell from '../components/notification';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/button';
+import { toast } from 'react-toastify';
 
 const Header: React.FC = () => {
   const { t } = useTranslation();
   const { state, dispatch } = useAuth();
   const { token, role, isLogin, account } = state;
+  const [loadingLogout, setLoadingLogout] = useState(false);
 
   //HANDLE LOGIN POPUP
   const [loginPopupOpen, setLoginPopupOpen] = useState(false);
@@ -26,7 +28,7 @@ const Header: React.FC = () => {
 
   //HANDLE LOAD INFO
   useEffect(() => {
-    const load = async() => {
+    const load = async () => {
       await axiosInstance.get('/courtstar/account/myInfor')
         .then(res => {
           dispatch({ type: 'SET_ACCOUNT', payload: res.data.data });
@@ -36,7 +38,7 @@ const Header: React.FC = () => {
           localStorage.clear();
           dispatch({ type: 'LOGOUT' });
         })
-        .finally(()=>{
+        .finally(() => {
         })
     }
 
@@ -48,16 +50,25 @@ const Header: React.FC = () => {
   //HANDLE LOGOUT ACTION
   const navigate = useNavigate();
   const logout = async () => {
+    setLoadingLogout(true);
     await axiosInstance.post(`/courtstar/auth/logout`, { token })
-      .then(res => {
+      .then(() => {
         localStorage.clear();
         dispatch({ type: 'LOGOUT' });
+        toast.success(`${t('logOutSuccessfully')}!`, {
+          toastId: 'log-out-successfully'
+        })
         navigate('/');
       })
       .catch(error => {
         console.log(error.message);
+        toast.warning('Can not log out now!', {
+          toastId: 'can-not-log-out'
+        })
       })
-      .finally();
+      .finally(
+        () => setLoadingLogout(false)
+      );
   };
 
   useEffect(() => {
@@ -84,12 +95,15 @@ const Header: React.FC = () => {
       <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-primary-green">
         <nav className="max-w-screen-1440 1440:mx-auto mx-4 w-full sm:flex sm:items-center sm:justify-between">
 
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between min-w-[416px]">
+            <Link className='py-2'
+              to={'/'}
+            >
               <img src={logo}
-                className="w-20 h-20"
+                className="h-16"
                 alt='logo' />
-            </div>
+
+            </Link>
             <div className="sm:hidden">
               <button type="button"
                 className="p-2 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none">
@@ -123,18 +137,20 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          <div className="hidden overflow-hidden transition-all duration-300 grow sm:block">
-            <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
+          <div className="hidden sm:flex justify-center overflow-hidden transition-all duration-200 grow text-lg">
+            <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:mt-0 font-medium">
 
               <Link
-                className="text-gray-200 font-medium hover:text-white hover:font-semibold transition-all ease-in-out duration-300"
+                className="text-gray-200 font-medium hover:text-white transition-all ease-in-out duration-200
+                cursor-pointer py-1 relative after:sm:absolute after:sm:bottom-0 after:sm:left-0 after:sm:bg-white after:sm:h-0.5 after:sm:w-0 hover:after:sm:w-full after:sm:transition-all after:sm:ease-in-out after:sm:duration-200 after:sm:rounded-md"
                 to="/"
               >
                 {t('home')}
               </Link>
 
               <Link
-                className="text-gray-200 hover:text-white transition-all ease-in-out duration-300"
+                className="text-gray-200 font-medium hover:text-white transition-all ease-in-out duration-200
+                cursor-pointer py-1 relative after:sm:absolute after:sm:bottom-0 after:sm:left-0 after:sm:bg-white after:sm:h-0.5 after:sm:w-0 hover:after:sm:w-full after:sm:transition-all after:sm:ease-in-out after:sm:duration-200 after:sm:rounded-md"
                 to="/aboutUs"
               >
                 {t('aboutUs')}
@@ -142,7 +158,8 @@ const Header: React.FC = () => {
 
               {!(role === 'MANAGER' || role === 'ADMIN') &&
                 <Link
-                  className="text-gray-200 hover:text-white transition-all ease-in-out duration-300"
+                  className="text-gray-200 font-medium hover:text-white transition-all ease-in-out duration-200
+                cursor-pointer py-1 relative after:sm:absolute after:sm:bottom-0 after:sm:left-0 after:sm:bg-white after:sm:h-0.5 after:sm:w-0 hover:after:sm:w-full after:sm:transition-all after:sm:ease-in-out after:sm:duration-200 after:sm:rounded-md"
                   to="/partnerRegister"
                 >
                   {t('partnerRegister')}
@@ -152,18 +169,20 @@ const Header: React.FC = () => {
               {
                 role && role === 'ADMIN' && isLogin &&
                 <Link
-                  className="text-gray-200 hover:text-white transition-all ease-in-out duration-300"
+                  className="text-gray-200 font-medium hover:text-white transition-all ease-in-out duration-200
+                cursor-pointer py-1 relative after:sm:absolute after:sm:bottom-0 after:sm:left-0 after:sm:bg-white after:sm:h-0.5 after:sm:w-0 hover:after:sm:w-full after:sm:transition-all after:sm:ease-in-out after:sm:duration-200 after:sm:rounded-md"
                   to="/admin"
                 >
-                  {t('myDashboard')}
+                  {t('myPlatform')}
                 </Link>
               }
 
               {
                 (role && (role === 'STAFF' || role === 'MANAGER')) && isLogin &&
                 <Link
-                  className="text-gray-200 hover:text-white transition-all ease-in-out duration-300"
-                  to={role === 'STAFF'? "/myCentre/:id" :"/myCentre/balance"}
+                  className="text-gray-200 font-medium hover:text-white transition-all ease-in-out duration-200
+                cursor-pointer py-1 relative after:sm:absolute after:sm:bottom-0 after:sm:left-0 after:sm:bg-white after:sm:h-0.5 after:sm:w-0 hover:after:sm:w-full after:sm:transition-all after:sm:ease-in-out after:sm:duration-200 after:sm:rounded-md"
+                  to={role === 'STAFF' ? "/myCentre/:id" : "/myCentre/balance"}
                 >
                   {t('myCentre')}
                 </Link>
@@ -172,7 +191,7 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex">
+          <div className="flex basis-1/4 justify-end">
 
             <LanguageSelector />
 
@@ -183,7 +202,7 @@ const Header: React.FC = () => {
                     label={t('logIn')}
                     size='medium'
                     fullWidth
-                    className='border-white border hover:bg-gray-200 text-white hover:text-primary-green'
+                    className='border-white border hover:bg-gray-200 text-white hover:text-primary-green min-w-36 max-w-36 min-h-[46px] max-h-[46px]'
                     onClick={handleLoginPopup}
                   />
                 </div>
@@ -192,7 +211,7 @@ const Header: React.FC = () => {
                     label={t('signUp')}
                     size='medium'
                     fullWidth
-                    className='bg-gray-700 hover:bg-gray-800 text-gray-200 border border-gray-700 hover:border-gray-800'
+                    className='bg-gray-700 hover:bg-gray-800 text-gray-200 border border-gray-700 hover:border-gray-800 min-w-36 max-w-36 min-h-[46px] max-h-[46px]'
                     onClick={() => navigate('/customerRegister')}
                   />
                 </div>
@@ -201,7 +220,11 @@ const Header: React.FC = () => {
 
             {(isLogin === true) && (
               <div className="flex items-center gap-3">
-                <DropdownHeader userEmail={account.email} logout={logout} />
+                <DropdownHeader
+                  userEmail={account.email}
+                  logout={logout}
+                  loadingLogout={loadingLogout}
+                />
                 <Bell
                   notifications={notifications}
                 />

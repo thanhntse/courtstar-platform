@@ -182,9 +182,15 @@ public class AccountService {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
         Account account = accountReponsitory.findByEmail(name).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND_USER));
+
+        String oldPassword = account.getPassword();
         accountMapper.updateAccount(account,request);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (!request.getPassword().trim().isEmpty()) {
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            account.setPassword(passwordEncoder.encode(request.getPassword()));
+        } else {
+            account.setPassword(oldPassword);
+        }
         AccountResponse accountResponse = accountMapper.toAccountResponse(accountReponsitory.save(account));
         return accountResponse;
     }
@@ -195,11 +201,6 @@ public class AccountService {
         AccountResponse accountResponse =accountMapper.toAccountResponse(account);
         //accountResponse.setRoles(account.getRole());
         return accountResponse;
-    }
-    public Account getAccountByEmail1(String email){
-        return  accountReponsitory.findByEmail(email)
-                .orElseThrow(()->new AppException(ErrorCode.NOT_FOUND_USER));
-
     }
 
     public boolean checkExistEmail(String email){

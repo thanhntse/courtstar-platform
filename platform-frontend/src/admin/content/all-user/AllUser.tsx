@@ -1,4 +1,3 @@
-import React from 'react'
 import Manager from './Manager';
 import Staff from './Staff';
 import Customer from './Customer';

@@ -11,5 +11,6 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthWithdrawalOrderRequest {
+    @Builder.Default
     LocalDateTime dateAuthenticate=LocalDateTime.now();
 }
