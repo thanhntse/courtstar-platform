@@ -39,6 +39,5 @@ public class CentreManager {
     @ToString.Exclude
     @JsonIgnore
     List<TransferMoney> transferMonies;
-
 }
 

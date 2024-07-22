@@ -2,7 +2,7 @@ import Button from "./button";
 
 export interface ButtonProps {
   type?: "submit" | "reset" | "button";
-  label: string;
+  label?: string;
   size?: 'small' | 'medium' | 'large' | 'mini';
   fullWidth?: boolean;
   fullRounded?: boolean;

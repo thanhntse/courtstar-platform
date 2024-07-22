@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Cancellation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .header {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid #dddddd;
+            border-radius: 10px;
+            background-color: #B22222;
+            color: #ffffff;
+        }
+        h1 {
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #dddddd;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Booking Cancellation</h1>
+    </div>
+    <div class="content">
+        <p>Hi <span th:text="${fullName}"></span>,</p>
+        <p>We regret to inform you that your court booking has been cancelled due to maintenance work at the court.</p>
+        <p>We apologize for the inconvenience this may cause and appreciate your understanding. Please contact the centre for more details and to reschedule your booking.</p>
+        <p>If you have any questions or need assistance, feel free to reach out to our support team via email.</p>
+        <p>Thank you,<br>CourtStar<br>courtstar.se@gmail.com
+    </div>
+    <div class="footer">
+        <p>This email was sent to <span th:text="${email}"></span> in response to your booking. If you did not make this request, please contact our support team immediately.</p>
+    </div>
+</div>
+</body>
+</html>

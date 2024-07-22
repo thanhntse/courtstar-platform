@@ -2,17 +2,21 @@ server:
   port: 8080
   servlet:
     context-path: /courtstar
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 spring:
   datasource:
-    url: jdbc:sqlserver://courtstar.database.windows.net:1433;database=courtstarv4;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-    username: adminv4
+    url: jdbc:sqlserver://courtstarv6.database.windows.net:1433;database=courtstarv6;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: adminv6
     password: Aa@123456
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   mail:
     host: smtp.gmail.com
     port: 587
-    username: minhoan305@gmail.com
-    password: jfcr heji pmzn bmzu
+    username: courtstar.se@gmail.com
+    password: lcmb sjfn zojm mzui
     properties:
       mail:
         smtp:
@@ -23,12 +27,13 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-    thymeleaf:
-      prefix: classpath:/templates/
-      suffix: .html
-      mode: HTML
-      encoding: UTF-8
-      cache: false
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+    template-resolver-order: 1
   jpa:
     hibernate:
       ddl-auto: update
@@ -57,8 +62,24 @@ payment:
     KEY1: "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL"
     KEY2: "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz"
     ORDER_CREATE_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/create"
-    ORDER_STATUS_ENDPOINT: "https://sandbox.zalopay.com.vn/v001/tpe/getstatusbyapptransid"
+    ORDER_STATUS_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/query"
     REFUND_PAYMENT_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/refund"
     REFUND_STATUS_PAYMENT_ENDPOINT: "https://sb-openapi.zalopay.vn/v2/query_refund"
+  vnpay:
+    VNP_PAY_URL : "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+    VNP_RETURN_URL : "http://localhost:3000/payment/result"
+    VNP_TMN_CODE : "6P4HZ4D4"
+    SECRET_KEY : "HECUONEHZKNXYLSVMCEALUHGSRLLJZPV"
+    VNP_API_URL : "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
+    VNP_VERSION : "2.1.0"
+    VNP_COMMAND_ORDER : "pay"
+    VNP_COMMAND_STATUS : "querydr"
+    ORDER_TYPE : "other"
+    VNP_CURRENCY_CODE : "VND"
+    VNP_LOCALE : "vn"
+    VNP_IP_ADDR : "192.168.1.252"
+    VNP_BANK_CODE : "NCB"
+    VNP_RESPONSE_CODE : "00"
+    VNP_TRANSACTION_STATUS: "00"
 
 

@@ -32,7 +32,7 @@ public class EmailUtil {
         String htmlContent = templateEngine.process("otp-email", context);
 
 
-        mimeMessageHelper.setFrom("minhoan305@gmail.com");
+        mimeMessageHelper.setFrom("courtstar.se@gmail.com");
         mimeMessageHelper.setTo(email);
         mimeMessageHelper.setSubject("Verify OTP");
         mimeMessageHelper.setText(htmlContent,true);

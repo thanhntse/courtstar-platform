@@ -15,11 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://courtstar-platform-frontend.vercel.app/"})
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -53,7 +54,7 @@ public class AccountController {
     }
 
     @GetMapping("/createEmail")
-    public ApiResponse<AccountResponse> createAccountByGmail(@AuthenticationPrincipal OAuth2User principal){
+    public RedirectView createAccountByGmail(@AuthenticationPrincipal OAuth2User principal){
         Map<String, Object> attributes = principal.getAttributes();
         String email= attributes.get("email").toString();
         ApiResponse apiResponse;
@@ -84,7 +85,7 @@ public class AccountController {
                 .data(account)
                 .build();
 
-        return apiResponse;
+        return new RedirectView("http://localhost:8080/courtstar/auth/token?email="+email+"&password="+1);
     }
 
     @GetMapping

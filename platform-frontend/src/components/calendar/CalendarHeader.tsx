@@ -2,6 +2,8 @@ import React from 'react';
 import Dropdown from '../dropdown';
 import Button from '../button';
 import { CalendarHeaderProps } from './index';
+import { useTranslation } from 'react-i18next';
+import SwitchButton from './switch-button/SwitchButton';
 
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   yearItems,
@@ -16,7 +18,11 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   typeOfCalendar,
   formCalendar,
   handleButton,
+  handleReset,
+  handleWeeklyBooking,
+  existSelection,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="header flex justify-between items-center py-2">
       <div className="flex gap-4">
@@ -64,14 +70,31 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           </button>
         </div>
       </div>
+      {
+        typeOfCalendar === "booking"
+        ?
+        <div>
+          <SwitchButton
+            onChange={handleWeeklyBooking}
+            existSelection={existSelection}
+          />
+        </div>
+        :
+        ""
+      }
       <div className="flex gap-5">
         <Button
-          label={typeOfCalendar === 'booking' ? 'Book now' : 'Disable'}
-          size='medium'
+          label={t('reset')}
           fullWidth
-          className='bg-primary-green hover:bg-teal-900 text-white'
+          className='hover:bg-red-600 hover:text-white text-red-600 border-red-600 border font-semibold min-w-24 py-2.5'
+          onClick={() => handleReset()}
+        />
+        <Button
+          label={typeOfCalendar === 'booking' ? t('booking') : t('Disable')}
+          fullWidth
+          className='bg-primary-green hover:bg-teal-900 text-white min-w-24 py-2.5'
           onClick={() => handleButton(formCalendar)}
-          disabled={!formCalendar.slotId}
+          disabled={!formCalendar?.length}
         />
       </div>
     </div>

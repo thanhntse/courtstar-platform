@@ -1,12 +1,13 @@
 package com.example.courtstar.controller;
 
 import com.example.courtstar.dto.request.ApiResponse;
+import com.example.courtstar.dto.request.DescriptionRequest;
 import com.example.courtstar.dto.response.PlatformResponse;
 import com.example.courtstar.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://courtstar-platform-frontend.vercel.app/"})
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -29,9 +30,9 @@ public class AdminController {
     }
 
     @PostMapping("/centre/deny/{id}")
-    public ApiResponse<Boolean> denyCentre(@PathVariable int id){
+    public ApiResponse<Boolean> denyCentre(@PathVariable int id, @RequestBody DescriptionRequest descriptionRequest){
         return ApiResponse.<Boolean>builder()
-                .data(adminService.deniedCentre(id))
+                .data(adminService.deniedCentre(id, descriptionRequest))
                 .build();
     }
 }

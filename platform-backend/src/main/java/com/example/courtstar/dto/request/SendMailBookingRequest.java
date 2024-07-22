@@ -1,10 +1,12 @@
 package com.example.courtstar.dto.request;
 
+import com.example.courtstar.entity.BookingDetail;
 import com.example.courtstar.entity.Slot;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,8 +20,7 @@ public class SendMailBookingRequest {
     String phone;
     String centreName;
     String centreAddress;
-    LocalDate date;
-    int courtNo;
     double price;
-    Slot slot;
+    List<BookingDetail> bookingDetails;
+    String appTransId;
 }

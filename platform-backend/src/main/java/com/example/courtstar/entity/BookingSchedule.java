@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,15 +21,8 @@ public class BookingSchedule {
     @Column(name = "id", nullable = false)
     Integer id;
 
-    @Column(name = "date")
-    LocalDate date;
-
     @Column(name = "total_price")
     double totalPrice;
-
-    @Column(name = "status")
-    @Builder.Default
-    boolean status = false;
 
     @Column(name = "success")
     @Builder.Default
@@ -48,17 +42,9 @@ public class BookingSchedule {
     @ToString.Exclude
     Guest guest;
 
-    @ManyToOne
-//    @JsonIgnore
-    @JoinColumn(name = "slot_id")
+    @OneToMany(mappedBy = "bookingSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    Slot slot;
-
-    @ManyToOne
-//    @JsonIgnore
-    @JoinColumn(name = "court_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    Court court;
+    List<BookingDetail> bookingDetails;
 }

@@ -39,4 +39,14 @@ public class NotificationService {
         );
         return notifications;
     }
+
+    public boolean updateNotification(Integer id) {
+        var findNotification = notificationRepository.findById(id).orElse(null);
+        if(findNotification != null) {
+            findNotification.setStatus(true);
+            notificationRepository.save(findNotification);
+            return true;
+        }
+        else return false;
+    }
 }

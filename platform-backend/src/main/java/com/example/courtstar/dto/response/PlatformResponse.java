@@ -12,11 +12,12 @@ import java.util.Map;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PlatformResponse {
-    double totalRevenue;
-    int totalCentre;
-    int totalUser;
-    Map<LocalDate, Long> users;
-    Map<LocalDate, Long> guests;
+    double weekRevenue;
+    Long weekCentre;
+    Long weekCustomer;
+    Long weekManager;
+    Map<LocalDate, Long> managers;
+    Map<LocalDate, Long> customers;
     Map<LocalDate, Long> centres;
     Map<LocalDate, Double> revenues;
 }

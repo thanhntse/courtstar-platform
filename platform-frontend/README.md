@@ -1,8 +1,54 @@
-# React + Vite
+# Badminton Court Booking Platform Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This project is a platform for booking badminton courts. The frontend is built using Vite with React, TypeScript, and styled using TailwindCSS, while the backend is powered by Spring Boot.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Deployment
+
+[CourtStar](https://courtstar-platform-frontend.vercel.app/)
+
+## Features
+
+
+- User registration and authentication (platform account or with Google)
+- Register as a manager or customer
+- Managers can add new courts
+- Customers and guests can book available courts
+- QR code check-in for customers and guests
+- Statistics and analytics on court usage
+- Manage bookings and user profiles
+- Admin panel for managing user, court, dashboard
+
+
+## Tech Stack
+
+**Frontend:**
+- [Vite](https://vitejs.dev/)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [SWC](https://swc.rs/)
+- [TailwindCSS](https://tailwindcss.com/)
+
+**Backend:**
+- [Spring Boot](https://spring.io/projects/spring-boot)
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+- Node.js (>=14.x)
+- npm (>=6.x) or yarn (>=1.x)
+
+### Installation
+
+1. **Clone the repository:**
+    ```sh
+    git clone https://github.com/Court-Star/courtstar-platform-frontend.git
+    cd courtstar-platform-frontend
+    npm install
+    npm run dev
+    ```
+
+The frontend application will be available at `http://localhost:3000`.

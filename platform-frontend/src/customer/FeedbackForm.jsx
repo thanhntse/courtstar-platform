@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../config/axiosConfig';
-import centre from '../assets/images/demo-centre.png';
 import Rating from '../components/Rating';
 import PopupModal from '../components/PopupModal';
 import { toast } from "react-toastify";
@@ -29,6 +28,20 @@ function FeedbackForm(props) {
     // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        // Validation
+        if (rating === 0) {
+            toast.error("Please provide a rating.", {
+                toastId: 'feedback-error'
+            });
+            return;
+        }
+        if (!comment.trim()) {
+            toast.error("Please provide a comment.", {
+                toastId: 'feedback-error'
+            });
+            return;
+        }
 
         const feedbackData = {
             content: comment,
@@ -64,7 +77,7 @@ function FeedbackForm(props) {
                 </div>
                 <div className="text-center mb-3">
                     <img
-                        src={props?.booking?.centreImg || centre}
+                        src={props?.booking?.centreImg}
                         alt={props?.booking?.centreName}
                         className="mx-auto object-cover object-center min-w-72 max-w-72 h-44 rounded-lg mb-3"
                     />

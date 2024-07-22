@@ -18,9 +18,12 @@ function Login(props) {
 
   const [loading, setLoading] = useState(false);
 
+  const [formError, setFormError] = useState(false);
+
   //CLOSE LOGIN MODAL
   const handleClose = () => {
     props.setIsOpen();
+    setFormError(false);
   }
 
   //HANDLE FORGET PASSWORD POPUP
@@ -49,6 +52,10 @@ function Login(props) {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    if (!formLogin.email || !formLogin.password) {
+      setFormError(true);
+      return;
+    }
     setLoading(true);
     await axiosInstance.post(`/courtstar/auth/token`, formLogin)
       .then(res => {
@@ -57,15 +64,25 @@ function Login(props) {
         localStorage.setItem('role', dataObj.data.role);
         dispatch({ type: 'LOGIN', payload: { token: dataObj.data.token, role: dataObj.data.role } });
         handleClose();
-        navigate('/');
-        toast.success(dataObj.message, {
+
+        if (dataObj.data.role === "MANAGER") navigate('/myCentre/balance')
+        else if (dataObj.data.role === "STAFF") navigate('/myCentre/:id')
+        else if (dataObj.data.role === "ADMIN") navigate('/admin')
+        else navigate('/');
+
+        toast.success(t('loginSuccess'), {
           toastId: 'login-success'
         });
       })
       .catch(error => {
-        toast.error(error.message, {
+        toast.error((error.message === 'Request failed with status code 401') || (error.message === 'Request failed with status code 400')
+          ?
+          t('wrongMailOrPass')
+          :
+          error.message, {
           toastId: 'login-error'
         });
+        console.log(error.message);
       })
       .finally(
         () => {
@@ -96,6 +113,8 @@ function Login(props) {
             label="Email*"
             value={formLogin.email}
             onchange={handleChange}
+            error={(formError && !formLogin.email)}
+            errorMsg={t('plsEnterEmail')}
           />
         </div>
         <div className="mb-0">
@@ -107,6 +126,8 @@ function Login(props) {
             value={formLogin.password}
             onchange={handleChange}
             evaluate={false}
+            error={(formError && !formLogin.password)}
+            errorMsg={t('plsEnterPassword')}
           />
         </div>
         <div className="flex items-center justify-between mt-4 mb-5 px-0.5">
@@ -124,21 +145,21 @@ function Login(props) {
             fullWidth
             fullRounded
             size='medium'
-            className='bg-primary-green hover:bg-teal-900 text-white'
+            className='bg-primary-green hover:bg-teal-900 text-white shadow'
             loading={loading}
           />
         </div>
         <div className='flex justify-center mt-4 '>
-          <button
-            className="text-center text-sm border border-black rounded-full py-3 px-14 inline-flex items-center hover:bg-gray-200 transition-all duration-300 ease-in-out"
-            href="#"
+          <a
+            className="text-center text-sm shadow border rounded-full py-3 px-14 inline-flex items-center hover:bg-gray-200 transition-all duration-300 ease-in-out"
+            href='http://localhost:8080/courtstar/account/createEmail'
           >
             <img className='mr-3 w-fit'
               src={google}
               alt='google'
             />
             {t('continueWithGoogle')}
-          </button>
+          </a>
         </div>
       </form>
     </div>

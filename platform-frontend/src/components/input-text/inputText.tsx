@@ -10,6 +10,8 @@ const InputText: React.FC<InputTextProps> = ({
   value,
   disabled,
   type = 'text',
+  error,
+  errorMsg,
 }) => {
   const [formattedValue, setFormattedValue] = useState(value);
 
@@ -50,12 +52,17 @@ const InputText: React.FC<InputTextProps> = ({
         type={type === 'number' ? 'text' : type}
         name={name}
         id={id}
-        className='w-full py-2.5 px-6 border border-gray-300 rounded-lg placeholder:text-sm placeholder:font-normal outline-gray-400'
+        className={`w-full py-2.5 px-6 border ${error ? 'border-red-500 outline-red-400 placeholder:text-red-500 animate-shake' : 'border-gray-300 outline-gray-400'} rounded-lg placeholder:text-sm placeholder:font-normal `}
         placeholder={placeholder}
         onChange={handleChange}
         value={formattedValue}
         disabled={disabled}
       />
+      {error &&
+        <div className='text-red-500 text-xs font-semibold text-end -mt-2 animate-shake'>
+          {errorMsg}
+        </div>
+      }
     </div>
   );
 };

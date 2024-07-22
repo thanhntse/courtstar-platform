@@ -38,12 +38,6 @@ public class Court {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JsonIgnore
-    List<BookingSchedule> bookingSchedules;
-
-    @OneToMany(mappedBy = "court", cascade = CascadeType.ALL, orphanRemoval = true)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    List<SlotUnavailable> slotUnavailables;
+    List<BookingDetail> bookingDetails;
 }
 

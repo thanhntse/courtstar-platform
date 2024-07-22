@@ -20,7 +20,7 @@ const XCarousel: React.FC<XCarouselProps> = ({ images }) => {
         transitionTime={1000}
       >
         {images.map((image) => (
-          <div key={image.id} className="w-[800px] h-[400px]">
+          <div key={image.id} className="w-[750px] h-[400px]">
             <img
               src={image.url}
               alt={`Image ${image.imageNo}`}

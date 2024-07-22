@@ -1,0 +1,4 @@
+
+.custom-overlay {
+  @apply bg-gray-900 bg-opacity-40
+}

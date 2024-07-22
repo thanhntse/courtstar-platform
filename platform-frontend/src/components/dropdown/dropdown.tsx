@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle, Ref } from 'react';
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Item, DropdownProps, DropdownRef } from './index';
 import DropdownItem from './dropdownItem';
 
@@ -30,6 +30,10 @@ const Dropdown = forwardRef<DropdownRef, DropdownProps>((props, ref) => {
     props.onSelect(item);        // Notify parent component about the selected item
     setIsOpen(false);            // Close the dropdown after selection
   };
+
+  useEffect(() => {
+    if(!props.placeholder) setSelectedItem(props.items[0].label || null)
+  }, [props.items]);
 
   // Effect to add and clean up event listener for clicks outside the dropdown
   useEffect(() => {
@@ -72,7 +76,7 @@ const Dropdown = forwardRef<DropdownRef, DropdownProps>((props, ref) => {
         aria-expanded={isOpen}
       >
         {/* Display selected item label or placeholder */}
-        <div className={`text-sm font-normal ${(selectedItem || props.initialValue) ? 'text-gray-800 font-semibold' : 'text-gray-400'}`}>
+        <div className={`text-sm font-normal truncate ${(selectedItem || props.initialValue) ? 'text-gray-800 font-semibold' : 'text-gray-400'}`}>
           {selectedItem || props.initialValue || props.placeholder}
         </div>
         {/* SVG for dropdown arrow, rotates when open */}
@@ -95,7 +99,7 @@ const Dropdown = forwardRef<DropdownRef, DropdownProps>((props, ref) => {
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className={`absolute ${props.dir === 'up' ? '-top-[216px]' : ''} w-full max-h-52 overflow-y-auto flex flex-col border border-gray-200 bg-white z-10 shadow-md rounded-lg mt-0.5`}
+          className={`absolute ${props.dir === 'up' ? '-top-[216px]' : ''} w-full max-h-52 overflow-y-auto flex flex-col border border-gray-200 bg-white z-10 shadow-md rounded-lg mt-0.5 gap-0.5`}
           role="listbox"
         >
           {/* Render dropdown items */}

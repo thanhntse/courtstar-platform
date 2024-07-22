@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TransferMoneyRepository extends JpaRepository<TransferMoney, Integer> {
     public List<TransferMoney> findAllByStatus(boolean status);
+    public List<TransferMoney> findAllByManagerId(Integer id);
 }

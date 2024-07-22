@@ -1,6 +1,8 @@
 package com.example.courtstar.services;
 
 import com.example.courtstar.constant.PredefinedNotificationType;
+import com.example.courtstar.constant.PredefinedRole;
+import com.example.courtstar.dto.request.DescriptionRequest;
 import com.example.courtstar.dto.response.PlatformResponse;
 import com.example.courtstar.entity.*;
 import com.example.courtstar.repositories.*;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -27,10 +30,9 @@ public class AdminService {
 
     private final CentreRepository centreRepository;
     private final AccountReponsitory accountReponsitory;
-    private final GuestRepository guestRepository;
     private final BookingScheduleRepository bookingScheduleRepository;
     private final NotificationRepository notificationRepository;
-    private final CentreManagerRepository centreManagerRepository;
+    private final PaymentRepository paymentRepository;
 
     public Boolean approveCentre(int centreId) {
         Centre centre = centreRepository.findById(centreId).orElseThrow(
@@ -49,7 +51,7 @@ public class AdminService {
         return true;
     }
 
-    public Boolean deniedCentre(int centreId) {
+    public Boolean deniedCentre(int centreId, DescriptionRequest descriptionRequest) {
         Centre centre = centreRepository.findById(centreId).orElseThrow(
                 () -> new IllegalArgumentException("Centre not found")
         );
@@ -59,52 +61,47 @@ public class AdminService {
         notificationRepository.save(Notification.builder()
                 .type(PredefinedNotificationType.DENIED_CENTRE)
                 .date(LocalDateTime.now())
-                .content(PredefinedNotificationType.DENIED_CENTRE_CONTENT)
+                .content(descriptionRequest.getDescription())
                 .account(centre.getManager().getAccount())
                 .build());
         return true;
     }
 
     public PlatformResponse getPlatformInfo() {
-        return PlatformResponse.builder()
-                .totalRevenue(getTotalRevenue()*0.05)
-                .totalCentre(centreRepository.findAll().stream().filter(centre -> centre.getApproveDate() != null).toList().size())
-                .totalUser(accountReponsitory.findAll().size() + guestRepository.findAll().size())
-                .revenues(getRevenuePerDay())
-                .users(getUserPerDay())
-                .guests(getGuestPerDay())
-                .centres(getCentrePerDay())
-                .build();
-    }
+        Map<LocalDate, Double> revenuePerDay = getRevenuePerDay();
+        Map<LocalDate, Long> managerPerDay = getUserPerDay(PredefinedRole.MANAGER_ROLE);
+        Map<LocalDate, Long> customerPerDay = getUserPerDay(PredefinedRole.CUSTOMER_ROLE);
+        Map<LocalDate, Long> centrePerDay = getCentrePerDay();
 
-    private double getTotalRevenue() {
-        return centreRepository.findAll().stream()
-                .mapToDouble(Centre::getRevenue)
-                .sum();
+        return PlatformResponse.builder()
+                .revenues(revenuePerDay)
+                .managers(managerPerDay)
+                .customers(customerPerDay)
+                .centres(centrePerDay)
+                .weekRevenue(getRevenueThisWeek(revenuePerDay))
+                .weekCentre(getCentreThisWeek(centrePerDay))
+                .weekCustomer(getCustomerThisWeek(customerPerDay))
+                .weekManager(getPartnerThisWeek(managerPerDay))
+                .build();
     }
 
     private Map<LocalDate, Double> getRevenuePerDay() {
         return centreRepository.findAll().stream()
                 .flatMap(centre -> bookingScheduleRepository.findAllByCentreId(centre.getId())
-                        .stream().filter(BookingSchedule::isSuccess))
+                        .stream().map(
+                                bookingSchedule -> paymentRepository.findByBookingScheduleId(bookingSchedule.getId())
+                                        .orElseThrow(null)
+                        )).filter(Payment::isStatus)
                 .collect(Collectors.groupingBy(
-                        BookingSchedule::getDate, // Group by date
-                        Collectors.summingDouble(BookingSchedule::getTotalPrice) // Sum the revenue for each date
+                        payment -> payment.getDate().toLocalDate(), // Group by date
+                        Collectors.summingDouble(Payment::getAmount) // Sum the revenue for each date
                 ));
     }
 
-    private  Map<LocalDate, Long> getUserPerDay() {
-        return accountReponsitory.findAll().stream()
+    private  Map<LocalDate, Long> getUserPerDay(String name) {
+        return accountReponsitory.findAllByRoleName(name).stream()
                 .collect(Collectors.groupingBy(
                         Account::getCreatedDate,
-                        Collectors.counting()
-                ));
-    }
-
-    private  Map<LocalDate, Long> getGuestPerDay() {
-        return guestRepository.findAll().stream()
-                .collect(Collectors.groupingBy(
-                        Guest::getCreatedDate,
                         Collectors.counting()
                 ));
     }
@@ -117,4 +114,45 @@ public class AdminService {
                         Collectors.counting()
                 ));
     }
+
+    private double getRevenueThisWeek(Map<LocalDate, Double> revenuePerDay) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+
+        return revenuePerDay.entrySet().stream()
+                .filter(entry -> !entry.getKey().isBefore(startOfWeek) && !entry.getKey().isAfter(today))
+                .mapToDouble(Map.Entry::getValue)
+                .sum();
+    }
+
+    private Long getPartnerThisWeek(Map<LocalDate, Long> partnerPerDay) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+
+        return partnerPerDay.entrySet().stream()
+                .filter(entry -> !entry.getKey().isBefore(startOfWeek) && !entry.getKey().isAfter(today))
+                .mapToLong(Map.Entry::getValue)
+                .sum();
+    }
+    private Long getCustomerThisWeek(Map<LocalDate, Long> customerPerDay) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+
+        return customerPerDay.entrySet().stream()
+                .filter(entry -> !entry.getKey().isBefore(startOfWeek) && !entry.getKey().isAfter(today))
+                .mapToLong(Map.Entry::getValue)
+                .sum();
+    }
+
+    private Long getCentreThisWeek(Map<LocalDate, Long> centrePerDay) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+
+        return centrePerDay.entrySet().stream()
+                .filter(entry -> !entry.getKey().isBefore(startOfWeek) && !entry.getKey().isAfter(today))
+                .mapToLong(Map.Entry::getValue)
+                .sum();
+    }
+
+
 }

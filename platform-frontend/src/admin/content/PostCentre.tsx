@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axiosInstance from '../../config/axiosConfig';
-import PopupModal from '../../components/PopupModal';
 import XCarousel from '../../components/carousel';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import Dialog from '../../components/Dialog';
 import { toast } from 'react-toastify';
 import SpinnerLoading from '../../components/SpinnerLoading';
+import showAlert from '../../components/alert';
+import PopupModal from '../../components/PopupModal';
+import InputText from '../../components/input-text';
+import Button from '../../components/button';
 
-type Props = {}
-
-const PostCentre = (props: Props) => {
+const PostCentre = () => {
   const controller = new AbortController();
   const { signal } = controller;
   const { t } = useTranslation();
@@ -18,6 +19,9 @@ const PostCentre = (props: Props) => {
   const [listCentrePending, setListCentrePending] = useState<any>();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [centreDetail, setCentreDetail] = useState<any>();
+  const [description, setDescription] = useState('');
+  const [loadingDel, setLoadingDel] = useState(false);
+
 
   const load = async () => {
     await axiosInstance.get(`/courtstar/centre/centre/pending`, { signal })
@@ -71,7 +75,8 @@ const PostCentre = (props: Props) => {
   }
 
   const denyRequest = async (id) => {
-    await axiosInstance.post(`/courtstar/admin/centre/deny/${id}`, { signal })
+    setLoadingDel(true);
+    await axiosInstance.post(`/courtstar/admin/centre/deny/${id}`, { description })
       .then(res => {
         // setListCentrePending(res.data.data)
         toast.success('Deny successfully', {
@@ -79,6 +84,7 @@ const PostCentre = (props: Props) => {
         });
         if (res.data.data) {
           load();
+          setOpenDesc(false)
           setIsOpenModal(false);
         }
       })
@@ -88,21 +94,21 @@ const PostCentre = (props: Props) => {
         });
       })
       .finally(
-      // () => {
-      //   setLoading(false);
-      // }
-    );
+        () => {
+          setLoadingDel(false);
+        }
+      );
   }
 
   const centreInfor = (
     <>
       {centreDetail &&
         <div
-          className="h-[calc(75vh)] w-[calc(80vw)]"
+          className="w-[calc(80vw)]"
         >
 
           <div className="flex justify-between gap-4">
-            <div className="w-[44rem]">
+            <div className="">
               <XCarousel images={centreDetail?.images} />
             </div>
 
@@ -153,7 +159,7 @@ const PostCentre = (props: Props) => {
                     </div>
                   </div>
                   <div className="mx-auto">
-                    <div className="grid grid-cols-2 gap-x-5">
+                    <div className="grid grid-cols-2 gap-x-20">
                       {centreDetail?.courts?.map((court) => (
                         <div
                           key={court.id}
@@ -184,7 +190,25 @@ const PostCentre = (props: Props) => {
     </>
   );
 
+  const formDesc = (
+    <div className="">
+      <InputText
+        id='description'
+        name='description'
+        value={description}
+        onchange={(e) => setDescription(e.target.value)}
+        placeholder={t('enterReasonForDenied')}
+      />
+      <Button
+        className='bg-primary-green mx-auto mt-3 w-full py-0.5 text-white hover:bg-teal-900'
+        label={t('confirm')}
+        onClick={() => denyRequest(centreDetail?.id)}
+        loading={loadingDel}
+      />
+    </div>
+  )
 
+  const [openDesc, setOpenDesc] = useState(false);
 
   return (
     <>
@@ -195,55 +219,70 @@ const PostCentre = (props: Props) => {
         }}
         html={centreInfor}
         title={centreDetail?.name}
-        submit={() => approveRequest(centreDetail?.id)}
-        submitDeny={() => denyRequest(centreDetail?.id)}
+        submit={() => {
+          showAlert({
+            title: t('areYouSure') + "?",
+            message: t('youAllowThisCentreOpenInTheSystem') + "!",
+            type: 'success',
+            onConfirmClick: () => approveRequest(centreDetail?.id)
+          });
+        }}
+        submitDeny={() => setOpenDesc(true)}
         centreInfo
       />
+
+      <PopupModal
+        isOpen={openDesc}
+        setIsOpen={() => setOpenDesc(false)}
+        html={formDesc}
+        centreInfo
+        title={t('reasonForDenial')}
+      />
+
       <div
-        className='py-7 px-7'
+        className="py-6 w-full"
       >
         <div className="text-3xl font-bold">
-          Post Centre Request
+        {t('postCentre')}
         </div>
 
         {loading
           ?
-          <SpinnerLoading
-            height='80'
-            width='80'
-            color='#2B5A50'
-          />
+          <div className="h-[500px] flex items-center justify-center">
+            <SpinnerLoading
+              height='80'
+              width='80'
+              color='#2B5A50'
+            />
+          </div>
           :
           <>
             {
               listCentrePending.length
                 ?
-                <div className="bg-white rounded-xl shadow mt-5">
-
-                  <div className="divide-y-2">
-                    {listCentrePending?.map((centre) => (
-                      <div
-                        key={centre.id}
-                        className="grid grid-cols-3 py-3 px-10 font-medium hover:bg-slate-100 cursor-pointer"
-                        onClick={() => openCentreDetail(centre.id)}
-                      >
-                        <div className="self-center font-semibold">
-                          {centre.name}
-                        </div>
-                        <div className="self-center">
-                          {centre.managerEmail}
-                        </div>
-                        <div className="w-fit justify-self-end">
-                          <div className="bg-red-500 text-white text-sm px-3 py-0.5 rounded-md">
-                            Pending
-                          </div>
+                <div className="mt-2">
+                  {listCentrePending?.map((centre) => (
+                    <div
+                      key={centre.id}
+                      className="grid grid-cols-3 py-3 px-10 mt-1 bg-white rounded-lg shadow-sm ease-in-out duration-300 font-medium hover:bg-teal-50 hover:px-8 cursor-pointer"
+                      onClick={() => openCentreDetail(centre.id)}
+                    >
+                      <div className="self-center font-semibold">
+                        {centre.name}
+                      </div>
+                      <div className="self-center">
+                        {centre.managerEmail}
+                      </div>
+                      <div className="w-fit justify-self-end">
+                        <div className="mx-auto text-white text-xs font-semibold px-2 py-1 bg-yellow-400 rounded-md">
+                          {t('Pending')}
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div >
                 :
-                <div className='flex flex-col items-center justify-center h-96 text-3xl text-primary mx-auto'>
+                <div className='flex flex-col items-center justify-center h-[500px] text-3xl text-primary mx-auto'>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="250" height="250"

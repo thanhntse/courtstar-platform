@@ -1,6 +1,6 @@
 package com.example.courtstar.dto.response;
 
-import com.example.courtstar.entity.SlotUnavailable;
+import com.example.courtstar.entity.BookingDetail;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,5 +15,5 @@ public class CourtResponse {
     int id;
     int courtNo;
     boolean status;
-    List<SlotUnavailable> slotUnavailables;
+    List<BookingDetailResponse> bookingDetails;
 }
