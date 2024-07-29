@@ -24,6 +24,7 @@ This project is a platform for booking badminton courts. The frontend is built u
 - [TypeScript](https://www.typescriptlang.org/)
 - [SWC](https://swc.rs/)
 - [TailwindCSS](https://tailwindcss.com/)
+- [Material UI](https://mui.com/core/)
 
 **Backend:**
 - [Spring Boot](https://spring.io/projects/spring-boot)
